@@ -116,7 +116,7 @@ tourSchema.pre(/^find/, function (next) {
 
 tourSchema.post(/^find/, function (docs, next) {
   //if docs not include in params the query result will show null
-  console.log(`Query took ${Date.now() - this.startDate}`);
+  // console.log(`Query took ${Date.now() - this.startDate}`);
 
   next();
 });
