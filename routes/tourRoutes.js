@@ -12,6 +12,8 @@ const {
   // checkBody,
 } = require('../controllers/tourControllers');
 
+const { protectRoute, portectRoute } = require('../controllers/authController');
+
 const router = express.Router();
 
 //Params middleware
@@ -21,7 +23,7 @@ const router = express.Router();
 router.route('/tour-stats').get(getTourStats);
 router.route('/monthly-plan/:year').get(getMonthlyPlan);
 router.route('/top-5-cheap').get(aliasTopTours, getAllTours);
-router.route('/').get(getAllTours).post(createTour);
+router.route('/').get(portectRoute, getAllTours).post(createTour);
 router.route('/:id').get(getTour).patch(updateTour).delete(deleteTour);
 
 module.exports = router;
