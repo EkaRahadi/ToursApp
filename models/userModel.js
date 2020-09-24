@@ -56,6 +56,14 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
+userSchema.pre('save', function (next) {
+  if (this.isModified('password') || this.isNew) return next();
+
+  this.passwordChangeAt = Date.now() - 1500; //because sometime timestamp on JWT created before
+  //the passwordChangeAt and make user cannot login because we compare it see cahngedPasswordAfter below
+  next();
+});
+
 userSchema.methods.correctPassword = async function (
   candidatePassword,
   userPassword
