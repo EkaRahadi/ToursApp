@@ -45,6 +45,11 @@ const userSchema = new mongoose.Schema({
   },
   passwordResetToken: String,
   passwordResetExpires: Date,
+  active: {
+    type: Boolean,
+    default: true,
+    select: false,
+  },
 });
 
 userSchema.pre('save', async function (next) {
@@ -61,6 +66,11 @@ userSchema.pre('save', function (next) {
 
   this.passwordChangeAt = Date.now() - 1500; //because sometime timestamp on JWT created before
   //the passwordChangeAt and make user cannot login because we compare it see cahngedPasswordAfter below
+  next();
+});
+
+userSchema.pre(/^find/, function (next) {
+  this.find({ active: { $ne: false } });
   next();
 });
 
