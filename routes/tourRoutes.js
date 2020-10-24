@@ -13,9 +13,18 @@ const {
 } = require('../controllers/tourControllers');
 
 const { protectRoute, restrictTo } = require('../controllers/authController');
-const reviewController = require('../controllers/reviewController');
+const reviewRouter = require('./reviewRoutes');
 
 const router = express.Router();
+
+//================================================================
+/*
+  POST /tours/21212/reviews/
+  GET /tour/21221/reviews/
+  GET /tour/212/reviews/12121
+*/
+
+router.use('/:tourId/reviews', reviewRouter);
 
 //Params middleware
 // router.param('id', checkID);
@@ -30,16 +39,5 @@ router
   .get(getTour)
   .patch(updateTour)
   .delete(protectRoute, restrictTo('admin', 'lead-guide'), deleteTour);
-
-//================================================================
-/*
-  POST /tours/21212/reviews/
-  GET /tour/21221/reviews/
-  GET /tour/212/reviews/12121
-*/
-
-router
-  .route('/:tourId/reviews')
-  .post(protectRoute, restrictTo('user'), reviewController.createReview);
 
 module.exports = router;
