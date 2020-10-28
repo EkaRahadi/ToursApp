@@ -31,13 +31,22 @@ router.use('/:tourId/reviews', reviewRouter);
 
 // router.route('/').get(getAllTours).post(checkBody, createTour);
 router.route('/tour-stats').get(getTourStats);
-router.route('/monthly-plan/:year').get(getMonthlyPlan);
+router
+  .route('/monthly-plan/:year')
+  .get(
+    protectRoute,
+    restrictTo('admin', 'lead-guide', 'guide'),
+    getMonthlyPlan
+  );
 router.route('/top-5-cheap').get(aliasTopTours, getAllTours);
-router.route('/').get(protectRoute, getAllTours).post(createTour);
+router
+  .route('/')
+  .get(getAllTours)
+  .post(protectRoute, restrictTo('admin', 'lead-guide'), createTour);
 router
   .route('/:id')
   .get(getTour)
-  .patch(updateTour)
+  .patch(protectRoute, restrictTo('admin', 'lead-guide'), updateTour)
   .delete(protectRoute, restrictTo('admin', 'lead-guide'), deleteTour);
 
 module.exports = router;
